@@ -7,3 +7,5 @@ services:
       - .env
     ports:
       - "5500:5432"
+    volumes:
+      - ./current_dump.sql:/docker-entrypoint-initdb.d/current_dump.sql
