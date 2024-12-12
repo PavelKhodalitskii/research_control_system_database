@@ -60,12 +60,12 @@ CREATE TABLE StudentProfile(
 CREATE TABLE Post(
 	ID SERIAL PRIMARY KEY,
 	PostName VARCHAR(128)
-)
+);
 
 CREATE TABLE AcademicDegree(
 	ID SERIAL PRIMARY KEY,
 	AcademicDegreeName VARCHAR(128)
-)
+);
 
 CREATE TABLE TeacherProfile(
 	ID SERIAL PRIMARY KEY,
@@ -84,11 +84,6 @@ CREATE TABLE GraduateStudentProfile(
 	StudGroup INTEGER REFERENCES Groups(ID) ON DELETE SET NULL,
 	Account INTEGER REFERENCES Account(ID) ON DELETE CASCADE
 );
-
-ALTER TABLE GraduateStudentProfile
-    DROP COLUMN Department,  -- Удаление старой колонки Department
-    ADD COLUMN StudGroup INTEGER REFERENCES Groups(ID) ON DELETE SET NULL;  -- Добавление новой колонки StudGroup с внешним ключом
-
 
 -- CREATE TABLE RelationTeacherDepartment(
 -- 	ID SERIAL PRIMARY KEY,
@@ -123,7 +118,7 @@ CREATE TABLE Event(
 	AddressNumber VARCHAR(128),
 	Date DATE,
 	Faculty INTEGER REFERENCES Faculty(ID) ON DELETE SET NULL
-)
+);
 
 CREATE TABLE Research(
 	ID SERIAL PRIMARY KEY,
@@ -135,7 +130,7 @@ CREATE TABLE ResearchParticipants(
 	ID SERIAL PRIMARY KEY,
 	Research INTEGER REFERENCES Research(ID) ON UPDATE CASCADE,
 	Account INTEGER REFERENCES Account(ID) ON UPDATE CASCADE
-)
+);
 
 SELECT * FROM Research
 
