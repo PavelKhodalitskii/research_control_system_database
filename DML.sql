@@ -1,14 +1,14 @@
-select * from Faculty
-select * from Department
-select * from Speciality
-select * from Groups
-select * from Account
-select * from StudentProfile
-select * from AcademicDegree
-select * from Post
-select * from TeacherProfile
-select * from GraduateStudentProfile
-select * from ResearchParticipants 
+-- select * from Faculty
+-- select * from Department
+-- select * from Speciality
+-- select * from Groups
+-- select * from Account
+-- select * from StudentProfile
+-- select * from AcademicDegree
+-- select * from Post
+-- select * from TeacherProfile
+-- select * from GraduateStudentProfile
+-- select * from ResearchParticipants 
 
 INSERT INTO Faculty (Name) VALUES
 ('Институт авиамашиностроения и транспорта'),

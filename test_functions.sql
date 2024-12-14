@@ -1,5 +1,5 @@
 select * from get_researches();
-select * from get_researches_by_year('2024');
+select * from get_researches_by_year(2024);
 select * from get_researches_by_date('2024-05-15');
 select * from get_olymps_by_faculty_id(5);
 select * from get_research_participants(1);
