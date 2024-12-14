@@ -200,6 +200,35 @@ CREATE OR REPLACE FUNCTION get_researches_by_year(
 	WHERE DATE_PART('Year', Date) = p_YEAR;
 $$ LANGUAGE sql;
 
+-- Получить НИР на определенную дату
+CREATE OR REPLACE FUNCTION get_researches_by_date(
+	p_Date DATE
+) RETURNS TABLE (
+		ResearchID INTEGER,
+		EventName VARCHAR,
+		EventType VARCHAR,
+		City VARCHAR,
+		Street VARCHAR,
+		AddressNumber VARCHAR,
+		Date DATE,
+		FacultyName VARCHAR,
+		CommitetteChairManId INTEGER
+) AS $$
+	SELECT
+		ResearchID,
+		EventName,
+		EventType,
+		City,
+		Street,
+		AddressNumber,
+		Date,
+		FacultyName,
+		CommitetteChairManId
+	FROM get_researches() 
+	WHERE Date = p_Date;
+$$ LANGUAGE sql;
+
+
 --------------------------------------------------------
 
 -- Получить участников исследования по его id
@@ -215,7 +244,7 @@ CREATE OR REPLACE FUNCTION get_research_participants(
 ) AS $$
 	SELECT 
 		Research.id as ResearchID,
-		Account.id as AccountID, 
+		Account.id as AccountID,
 		Account.FirstName as FirstName, 
 		Account.LastName as LastName, 
 		Account.Patronymic as Patronymic
