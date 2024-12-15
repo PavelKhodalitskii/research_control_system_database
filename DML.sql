@@ -1,13 +1,14 @@
-select * from Faculty
-select * from Department
-select * from Speciality
-select * from Groups
-select * from Account
-select * from StudentProfile
-select * from AcademicDegree
-select * from Post
-select * from TeacherProfile
-select * from GraduateStudentProfile
+-- select * from Faculty
+-- select * from Department
+-- select * from Speciality
+-- select * from Groups
+-- select * from Account
+-- select * from StudentProfile
+-- select * from AcademicDegree
+-- select * from Post
+-- select * from TeacherProfile
+-- select * from GraduateStudentProfile
+-- select * from ResearchParticipants 
 
 INSERT INTO Faculty (Name) VALUES
 ('Институт авиамашиностроения и транспорта'),
@@ -390,6 +391,184 @@ INSERT INTO GraduateStudentProfile (Year, StudGroup, Account) VALUES
 (2, 14, 134),
 (1, 13, 135);
 
+INSERT INTO Commitette (Chairman) VALUES
+(3),
+(8),
+(17),
+(21),
+(26);
+
+INSERT INTO RelationTeachersCommitette (TeacherProfile, Commitette) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+(4, 1),
+(5, 1),
+
+(6, 2),
+(7, 2),
+(8, 2),
+(9, 2),
+(10, 2),
+
+(11, 3),
+(12, 3),
+(13, 3),
+(14, 3),
+(15, 3),
+
+(16, 4),
+(17, 4),
+(18, 4),
+(19, 4),
+(20, 4),
+
+(21, 5),
+(22, 5),
+(23, 5),
+(24, 5),
+(25, 5);
+
+-- Вставляем по 3 аспиранта в каждый комитет
+INSERT INTO RelationGraduateStudentCommitette (GraduateStudentProfile, Commitette) VALUES
+(1, 1),
+(2, 1),
+(3, 1),
+
+(4, 2),
+(5, 2),
+(6, 2),
+
+(7, 3),
+(8, 3),
+(9, 3),
+
+(10, 4),
+(11, 4),
+(12, 4),
+
+(13, 5),
+(14, 5),
+(15, 5);
+
+INSERT INTO Event (Name, Type, AddressCity, AddressStreet, AddressNumber, Date, Faculty) VALUES
+('Научная конференция по ИТ', 'Научно-исследовательское', 'Москва', 'Ленина', '10', '2024-05-15', 1),
+('Международный семинар по машиностроению', 'Научно-исследовательское', 'Санкт-Петербург', 'Гагарина', '25', '2024-06-20', 2),
+('Экспериментальный симпозиум по энергетике', 'Научно-исследовательское', 'Москва', 'Киевская', '12', '2024-07-10', 3),
+('Форум по новым технологиям в строительстве', 'Научно-исследовательское', 'Москва', 'Чкалова', '15', '2024-08-05', 4),
+('Всероссийская олимпиада по математике', 'Олимпиада', 'Санкт-Петербург', 'Тимирязева', '8', '2024-09-25', 5);
+
+INSERT INTO Research (Commitette, Event) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+INSERT INTO ResearchParticipants (Research, Account) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+
+(2, 6),
+(2, 7),
+(2, 8),
+(2, 9),
+(2, 10),
+
+(3, 11),
+(3, 12),
+(3, 13),
+(3, 14),
+(3, 15),
+
+(4, 16),
+(4, 17),
+(4, 18),
+(4, 19),
+(4, 20),
+
+(5, 21),
+(5, 22),
+(5, 23),
+(5, 24),
+(5, 25),
+
+(1, 80),
+(2, 81),
+(3, 82),
+(4, 83),
+(5, 84),
+
+(1, 85),
+(2, 86),
+(3, 87),
+(4, 88),
+(5, 89),
+
+(1, 90),
+(2, 91),
+(3, 92),
+(4, 93),
+(5, 94),
+
+(1, 95),
+(2, 96),
+(3, 97),
+(4, 98),
+(5, 99);
 
 
+-- Вставляем участников научных исследований (по 10 на каждое исследование)
+INSERT INTO ResearchParticipants (Research, Account) VALUES
+(1, 6),
+(1, 7),
+(1, 8),
+(1, 9),
+(1, 10),
 
+(2, 11),
+(2, 12),
+(2, 13),
+(2, 14),
+(2, 15),
+(2, 16),
+(2, 17),
+(2, 18),
+(2, 19),
+(2, 20),
+
+(3, 21),
+(3, 22),
+(3, 23),
+(3, 24),
+(3, 25),
+(3, 26),
+(3, 27),
+(3, 28),
+(3, 29),
+(3, 30),
+
+(4, 31),
+(4, 32),
+(4, 33),
+(4, 34),
+(4, 35),
+(4, 36),
+(4, 37),
+(4, 38),
+(4, 39),
+(4, 40),
+
+(5, 80),
+(5, 81),
+(5, 82),
+(5, 83),
+(5, 85),
+(5, 86),
+(5, 87),
+(5, 88),
+
+(2, 100);

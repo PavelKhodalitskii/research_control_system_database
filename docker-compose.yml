@@ -3,6 +3,7 @@ version: '3.8'
 services:
   database:
     build: .
+    container_name: rcs_database
     env_file:
       - .env
     ports:
