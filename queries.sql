@@ -19,10 +19,10 @@ CREATE OR REPLACE FUNCTION get_graduate_student_by_account_id(
 ) AS $$
 	SELECT 
 		GraduateStudentProfile.Id as GraduateStudentID,
-		Account.Id as AccountID,
-		Account.FirstName as FirstName, 
-		Account.LastName as LastName, 
-		Account.Patronymic as Patronymic,
+		AccountData.Id as AccountID,
+		AccountData.FirstName as FirstName, 
+		AccountData.LastName as LastName, 
+		AccountData.Patronymic as Patronymic,
 		GraduateStudentProfile.Year as Year,
 		Groups.Name as StudGroup,
 		Speciality.Name as Speciality,
@@ -30,8 +30,12 @@ CREATE OR REPLACE FUNCTION get_graduate_student_by_account_id(
 		Faculty.Name as Faculty
 	FROM
 	GraduateStudentProfile
-	JOIN Account
-	ON GraduateStudentProfile.Account = Account.Id
+	JOIN (SELECT Account.Id,
+				 Account.FirstName,
+				 Account.LastName,
+				 Account.Patronymic
+		  FROM Account WHERE Account.Id = p_AccountId) AccountData
+	ON GraduateStudentProfile.Account = AccountData.Id
 	JOIN Groups
 	ON GraduateStudentProfile.StudGroup = Groups.Id
 	JOIN Speciality
@@ -40,8 +44,8 @@ CREATE OR REPLACE FUNCTION get_graduate_student_by_account_id(
 	ON Speciality.Department = Department.Id
 	JOIN Faculty
 	ON Department.Faculty = Faculty.Id
-	WHERE Account.Id = p_AccountId;
 $$ LANGUAGE sql;
+
 
 --------------------------------------------------------
 
@@ -64,10 +68,10 @@ CREATE OR REPLACE FUNCTION get_student_by_account_id(
 ) AS $$
 	SELECT 
 		StudentProfile.Id as StudentID,
-		Account.Id as AccountID,
-		Account.FirstName as FirstName, 
-		Account.LastName as LastName, 
-		Account.Patronymic as Patronymic,
+		AccountData.Id as AccountID,
+		AccountData.FirstName as FirstName, 
+		AccountData.LastName as LastName, 
+		AccountData.Patronymic as Patronymic,
 		StudentProfile.Year as Year,
 		Groups.Name as StudGroup,
 		Speciality.Name as Speciality,
@@ -75,8 +79,12 @@ CREATE OR REPLACE FUNCTION get_student_by_account_id(
 		Faculty.Name as Faculty
 	FROM
 	StudentProfile
-	JOIN Account
-	ON StudentProfile.Account = Account.Id
+	JOIN (SELECT Account.Id,
+				 Account.FirstName,
+				 Account.LastName,
+				 Account.Patronymic
+		  FROM Account WHERE Account.Id = p_AccountId) AccountData
+	ON StudentProfile.Account = AccountData.Id
 	JOIN Groups
 	ON StudentProfile.StudGroup = Groups.Id
 	JOIN Speciality
@@ -85,8 +93,8 @@ CREATE OR REPLACE FUNCTION get_student_by_account_id(
 	ON Speciality.Department = Department.Id
 	JOIN Faculty
 	ON Department.Faculty = Faculty.Id
-	WHERE Account.Id = p_AccountId;
 $$ LANGUAGE sql;
+
 
 --------------------------------------------------------
 
@@ -107,25 +115,28 @@ CREATE OR REPLACE FUNCTION get_teacher_by_account_id(
 ) AS $$
 	SELECT 
 		TeacherProfile.id as TeacherID,
-		Account.id as AccountID, 
-		Account.FirstName as FirstName, 
-		Account.LastName as LastName, 
-		Account.Patronymic as Patronymic,
+		AccountData.id as AccountID, 
+		AccountData.FirstName as FirstName, 
+		AccountData.LastName as LastName, 
+		AccountData.Patronymic as Patronymic,
 		Post.PostName as Post,
 		AcademicDegree.AcademicDegreeName as AcademicDegree,
 		Department.Name as DepartmentName,
 		TeacherProfile.IsHead as IsHead
 	FROM 
 	TeacherProfile
-	JOIN Account
-	ON TeacherProfile.Account = Account.Id
+	JOIN (SELECT Account.Id,
+				 Account.FirstName,
+				 Account.LastName,
+				 Account.Patronymic
+		  FROM Account WHERE Account.Id = p_AccountId) AccountData
+	ON TeacherProfile.Account = AccountData.Id
 	JOIN Post
 	ON TeacherProfile.Post = Post.Id
 	JOIN AcademicDegree
 	ON TeacherProfile.Degree = AcademicDegree.Id
 	JOIN Department
 	ON TeacherProfile.Department = Department.Id
-	WHERE Account.id = p_AccountId;
 $$ LANGUAGE sql;
 
 --------------------------------------------------------
