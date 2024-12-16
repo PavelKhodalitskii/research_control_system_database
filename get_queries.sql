@@ -1,3 +1,42 @@
+--------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION get_all_student_info()
+RETURNS TABLE (
+	Id INTEGER,
+	AccountID INTEGER,
+	FirstName VARCHAR, 
+	LastName VARCHAR, 
+	Patronymic VARCHAR,
+	Year INTEGER,
+	StudGroup VARCHAR,
+	Speciality VARCHAR,
+	Department VARCHAR,
+	Faculty VARCHAR
+) AS $$
+	SELECT 
+		StudentProfile.Id as Id,
+		Account.Id as AccountID,
+		Account.FirstName as FirstName, 
+		Account.LastName as LastName, 
+		Account.Patronymic as Patronymic,
+		StudentProfile.Year as Year,
+		Groups.Name as StudGroup,
+		Speciality.Name as Speciality,
+		Department.Name as Department,
+		Faculty.Name as Faculty
+	FROM
+	StudentProfile
+	JOIN Account
+	ON StudentProfile.Account = Account.Id
+	JOIN Groups
+	ON StudentProfile.StudGroup = Groups.Id
+	JOIN Speciality
+	ON Groups.Specialty = Speciality.Id
+	JOIN Department
+	ON Speciality.Department = Department.Id
+	JOIN Faculty
+	ON Department.Faculty = Faculty.Id
+$$ LANGUAGE sql;
 
 --------------------------------------------------------
 
