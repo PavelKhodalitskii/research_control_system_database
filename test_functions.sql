@@ -7,3 +7,5 @@ select * from get_research_participants(1);
 select * from get_teacher_by_account_id(41);
 select * from get_student_by_account_id(5);
 select * from get_graduate_student_by_account_id(102);
+
+select * from get_researches_by_account_id(6);
