@@ -1,3 +1,204 @@
+CREATE OR REPLACE FUNCTION get_commitette_participants(
+	p_Commitette INTEGER
+) RETURNS TABLE (
+	Id INTEGER
+) AS $$
+	SELECT Account FROM
+	(SELECT Account FROM
+	RelationTeachersCommitette
+	JOIN TeacherProfile 
+	ON RelationTeachersCommitette.TeacherProfile = TeacherProfile.Id
+	WHERE RelationTeachersCommitette.Commitette = p_Commitette) as TeacherCommitettes
+	UNION ALL
+	(SELECT Account FROM
+	RelationGraduateStudentCommitette
+	JOIN GraduateStudentProfile 
+	ON RelationGraduateStudentCommitette.GraduateStudentProfile = GraduateStudentProfile.Id
+	WHERE RelationGraduateStudentCommitette.Commitette = p_Commitette);
+$$ LANGUAGE sql;
+
+
+$$ LANGUAGE sql;
+
+
+CREATE OR REPLACE FUNCTION get_committies_by_teacher_id()
+RETURNS TABLE (
+	Id INTEGER,
+	ResearchId INTEGER,
+	ResearchName VARCHAR,
+	IsHead BOOLEAN
+) AS $$
+
+---------------------
+
+
+CREATE OR REPLACE FUNCTION get_all_graduate_students_info()
+RETURNS TABLE (
+	Id INTEGER,
+	AccountID INTEGER,
+	FirstName VARCHAR, 
+	LastName VARCHAR, 
+	Patronymic VARCHAR,
+	Year INTEGER,
+	StudGroup INTEGER,
+	GroupName VARCHAR,
+	Speciality VARCHAR,
+	Department VARCHAR,
+	Faculty VARCHAR
+) AS $$
+	SELECT 
+		GraduateStudentProfile.Id as Id,
+		Account.Id as AccountID,
+		Account.FirstName as FirstName, 
+		Account.LastName as LastName, 
+		Account.Patronymic as Patronymic,
+		GraduateStudentProfile.Year as Year,
+		Groups.Id as StudGroup,
+		Groups.Name as GroupName,
+		Speciality.Name as Speciality,
+		Department.Name as Department,
+		Faculty.Name as Faculty
+	FROM
+	GraduateStudentProfile
+	JOIN Account
+	ON GraduateStudentProfile.Account = Account.Id
+	JOIN Groups
+	ON GraduateStudentProfile.StudGroup = Groups.Id
+	JOIN Speciality
+	ON Groups.Specialty = Speciality.Id
+	JOIN Department
+	ON Speciality.Department = Department.Id
+	JOIN Faculty
+	ON Department.Faculty = Faculty.Id
+$$ LANGUAGE sql;
+
+CREATE OR REPLACE FUNCTION get_researches_by_account_id(
+	p_AccountId INTEGER
+) RETURNS TABLE (
+	ID INTEGER,
+	Event INTEGER,
+	EventName VARCHAR,
+	EventType VARCHAR,
+	City VARCHAR,
+	Street VARCHAR,
+	AddressNumber VARCHAR,
+	Date DATE,
+	Faculty INTEGER,
+	FacultyName VARCHAR,
+	CommitetteChairManId INTEGER
+) AS $$
+	SELECT
+		Research.Id as Id,
+		Event.Id as Event,
+		Event.Name as EventName,
+		Event.Type as EventType,
+		Event.AddressCity as City,
+		Event.AddressStreet as Street,
+		Event.AddressNumber as AddressNumber,
+		Event.Date as Date,
+		Faculty INTEGER,
+		Faculty.Name as FacultyName,
+		Commitette.ChairMan as CommitetteChairManId
+	FROM 
+	Research
+	RIGHT JOIN (SELECT Research FROM ResearchParticipants WHERE Account = p_AccountId) AccountsResearches
+	ON Research.Id = AccountsResearches.Research
+	JOIN Event
+	ON Event.Id = Research.Event
+	JOIN Faculty
+	ON Faculty.Id = Event.Faculty
+	JOIN Commitette 
+	ON Commitette.Id = Research.Commitette
+	JOIN TeacherProfile
+	ON TeacherProfile.Id = Commitette.Chairman
+	JOIN Post
+	ON Post.Id = TeacherProfile.post;
+$$ LANGUAGE sql;
+
+
+--------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION get_all_teachers_info(
+) RETURNS TABLE (
+	Id INTEGER,
+	AccountId INTEGER, 
+	FirstName VARCHAR, 
+	LastName VARCHAR, 
+	Patronymic VARCHAR,
+	Post INTEGER,
+	PostName VARCHAR,
+	Degree INTEGER,
+	AcademicDegreeName VARCHAR,
+	Department INTEGER,
+	DepartmentName VARCHAR,
+	IsHead BOOLEAN
+) AS $$
+	SELECT 
+		TeacherProfile.id as Id,
+		Account.Id as AccountId, 
+		Account.FirstName as FirstName, 
+		Account.LastName as LastName, 
+		Account.Patronymic as Patronymic,
+		Post.Id as Post,
+		Post.PostName as PostName,
+		AcademicDegree.Id as Degree,
+		AcademicDegree.AcademicDegreeName as AcademicDegreeName,
+		Department.Id as Department,
+		Department.Name as DepartmentName,
+		TeacherProfile.IsHead as IsHead
+	FROM 
+	TeacherProfile
+	JOIN Account
+	ON TeacherProfile.Account = Account.Id
+	JOIN Post
+	ON TeacherProfile.Post = Post.Id
+	JOIN AcademicDegree
+	ON TeacherProfile.Degree = AcademicDegree.Id
+	JOIN Department
+	ON TeacherProfile.Department = Department.Id
+$$ LANGUAGE sql;
+
+--------------------------------------------------------
+
+CREATE OR REPLACE FUNCTION get_all_student_info()
+RETURNS TABLE (
+	Id INTEGER,
+	AccountID INTEGER,
+	FirstName VARCHAR, 
+	LastName VARCHAR, 
+	Patronymic VARCHAR,
+	Year INTEGER,
+	StudGroup INTEGER,
+	GroupName VARCHAR,
+	Speciality VARCHAR,
+	Department VARCHAR,
+	Faculty VARCHAR
+) AS $$
+	SELECT 
+		StudentProfile.Id as Id,
+		Account.Id as AccountID,
+		Account.FirstName as FirstName, 
+		Account.LastName as LastName, 
+		Account.Patronymic as Patronymic,
+		StudentProfile.Year as Year,
+		Groups.Id as StudGroup,
+		Groups.Name as GroupName,
+		Speciality.Name as Speciality,
+		Department.Name as Department,
+		Faculty.Name as Faculty
+	FROM
+	StudentProfile
+	JOIN Account
+	ON StudentProfile.Account = Account.Id
+	JOIN Groups
+	ON StudentProfile.StudGroup = Groups.Id
+	JOIN Speciality
+	ON Groups.Specialty = Speciality.Id
+	JOIN Department
+	ON Speciality.Department = Department.Id
+	JOIN Faculty
+	ON Department.Faculty = Faculty.Id
+$$ LANGUAGE sql;
 
 --------------------------------------------------------
 
@@ -55,7 +256,7 @@ $$ LANGUAGE sql;
 CREATE OR REPLACE FUNCTION get_student_by_account_id(
 	p_AccountId INTEGER
 ) RETURNS TABLE (
-	StudentID INTEGER,
+	Id INTEGER,
 	AccountID INTEGER,
 	FirstName VARCHAR, 
 	LastName VARCHAR, 
@@ -103,7 +304,7 @@ $$ LANGUAGE sql;
 CREATE OR REPLACE FUNCTION get_teacher_by_account_id(
 	p_AccountId INTEGER
 ) RETURNS TABLE (
-	TeacherID INTEGER,
+	Id INTEGER,
 	AccountID INTEGER, 
 	FirstName VARCHAR, 
 	LastName VARCHAR, 
@@ -114,7 +315,7 @@ CREATE OR REPLACE FUNCTION get_teacher_by_account_id(
 	IsHead BOOLEAN
 ) AS $$
 	SELECT 
-		TeacherProfile.id as TeacherID,
+		TeacherProfile.id as Id,
 		AccountData.id as AccountID, 
 		AccountData.FirstName as FirstName, 
 		AccountData.LastName as LastName, 
@@ -143,25 +344,25 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION get_researches() 
 RETURNS TABLE (
-		ResearchID INTEGER,
-		EventName VARCHAR,
-		EventType VARCHAR,
+		Id INTEGER,
+		Name VARCHAR,
+		Type VARCHAR,
 		City VARCHAR,
 		Street VARCHAR,
 		AddressNumber VARCHAR,
 		Date DATE,
-		FacultyName VARCHAR,
+		Faculty INTEGER,
 		CommitetteChairManId INTEGER
 ) AS $$
 	SELECT
-		Research.Id as ResearchID,
-		Event.Name as EventName,
-		Event.Type as EventType,
+		Event.Id as Id,
+		Event.Name as Name,
+		Event.Type as Type,
 		Event.AddressCity as City,
 		Event.AddressStreet as Street,
 		Event.AddressNumber as AddressNumber,
 		Event.Date as Date,
-		Faculty.Name as FacultyName,
+		Faculty.Id as Faculty,
 		Commitette.ChairMan as CommitetteChairManId
 	FROM Research 
 	
