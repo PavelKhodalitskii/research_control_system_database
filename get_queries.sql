@@ -1,3 +1,37 @@
+CREATE OR REPLACE FUNCTION get_commitette_participants(
+	p_Commitette INTEGER
+) RETURNS TABLE (
+	Id INTEGER
+) AS $$
+	SELECT Account FROM
+	(SELECT Account FROM
+	RelationTeachersCommitette
+	JOIN TeacherProfile 
+	ON RelationTeachersCommitette.TeacherProfile = TeacherProfile.Id
+	WHERE RelationTeachersCommitette.Commitette = p_Commitette) as TeacherCommitettes
+	UNION ALL
+	(SELECT Account FROM
+	RelationGraduateStudentCommitette
+	JOIN GraduateStudentProfile 
+	ON RelationGraduateStudentCommitette.GraduateStudentProfile = GraduateStudentProfile.Id
+	WHERE RelationGraduateStudentCommitette.Commitette = p_Commitette);
+$$ LANGUAGE sql;
+
+
+$$ LANGUAGE sql;
+
+
+CREATE OR REPLACE FUNCTION get_committies_by_teacher_id()
+RETURNS TABLE (
+	Id INTEGER,
+	ResearchId INTEGER,
+	ResearchName VARCHAR,
+	IsHead BOOLEAN
+) AS $$
+
+---------------------
+
+
 CREATE OR REPLACE FUNCTION get_all_graduate_students_info()
 RETURNS TABLE (
 	Id INTEGER,
@@ -310,25 +344,25 @@ $$ LANGUAGE sql;
 
 CREATE OR REPLACE FUNCTION get_researches() 
 RETURNS TABLE (
-		ResearchID INTEGER,
-		EventName VARCHAR,
-		EventType VARCHAR,
+		Id INTEGER,
+		Name VARCHAR,
+		Type VARCHAR,
 		City VARCHAR,
 		Street VARCHAR,
 		AddressNumber VARCHAR,
 		Date DATE,
-		FacultyName VARCHAR,
+		Faculty INTEGER,
 		CommitetteChairManId INTEGER
 ) AS $$
 	SELECT
-		Research.Id as ResearchID,
-		Event.Name as EventName,
-		Event.Type as EventType,
+		Event.Id as Id,
+		Event.Name as Name,
+		Event.Type as Type,
 		Event.AddressCity as City,
 		Event.AddressStreet as Street,
 		Event.AddressNumber as AddressNumber,
 		Event.Date as Date,
-		Faculty.Name as FacultyName,
+		Faculty.Id as Faculty,
 		Commitette.ChairMan as CommitetteChairManId
 	FROM Research 
 	

@@ -105,7 +105,7 @@ CREATE TABLE RelationTeachersCommitette(
 
 CREATE TABLE RelationGraduateStudentCommitette(
 	ID SERIAL PRIMARY KEY,
-	GraduateStudentProfile INTEGER REFERENCES GraduateStudentProfile(ID) ON UPDATE CASCADE,
+	GraduateStudentProfile INTEGER REFERENCES GraduateStudentProfile(ID) ON DELETE CASCADE,
 	Commitette INTEGER REFERENCES Commitette(ID) ON DELETE CASCADE
 );
 
@@ -128,8 +128,8 @@ CREATE TABLE Research(
 
 CREATE TABLE ResearchParticipants(
 	ID SERIAL PRIMARY KEY,
-	Research INTEGER REFERENCES Research(ID) ON UPDATE CASCADE,
-	Account INTEGER REFERENCES Account(ID) ON UPDATE CASCADE
+	Research INTEGER REFERENCES Research(ID) ON DELETE CASCADE,
+	Account INTEGER REFERENCES Account(ID) ON DELETE CASCADE
 );
 
 SELECT * FROM Research
